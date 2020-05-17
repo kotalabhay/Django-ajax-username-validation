@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+<h2>Sign up</h2>
+ <form method="post">
+   {% csrf_token %}
+   {% for field in form %}
+     <p>
+       {{ field.label_tag }}<br>
+       {{ field }}
+       {% if field.help_text %}
+         <small style="color: grey">{{ field.help_text }}</small>
+       {% endif %}
+       {% for error in field.errors %}
+         <p style="color: red">{{ error }}</p>
+       {% endfor %}
+     </p>
+   {% endfor %}
+   <button type="submit">Sign up</button>
+ </form>
+ <script>
+
+
+
+
+
+
+
+				 $("#id_username").keyup(function(){
+						 var username=$(this).val();
+						 if(username!=""){
+								 $.ajax({
+										 url:'{% url 'check_username_exist' %}',
+										 type:'POST',
+										 data:{username:username}
+								 })
+								 .done(function(response){
+										 console.log(response);
+										 if(response=="True"){
+												 $(".username_error").remove();
+												 $("<span class='username_error' style='padding: 5px;color: red;font-weight: bold;'>Username Not Available</span>").insertAfter("#id_username");
+								
+
+										 }
+										 else{
+												 $(".username_error").remove();
+												 $("<span class='username_error' style='padding: 5px;color: green;font-weight: bold;'>>Username  Available</span>").insertAfter("#id_username");
+										
+
+
+										 }
+								 })
+								 .fail(function(){
+										 console.log("failed");
+								 })
+						 }
+						 else{
+								 $(".username_error").remove();
+						 }
+
+				 });
+
+ </script>
